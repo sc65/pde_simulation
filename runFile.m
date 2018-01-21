@@ -31,9 +31,6 @@ for ii = 1
     saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
         radius, nSides, ii)    
 end
-%% ---- continue a simulation
-
-runMeinhartPDE_continue(fhandle,  kappa, radius, nSides, saveInPath)
 
 
 
