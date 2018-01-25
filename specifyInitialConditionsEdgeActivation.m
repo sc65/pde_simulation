@@ -1,7 +1,9 @@
-function [currState, storeStates] = specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx, userParam)
+function [currState, storeStates] = specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx)
 %% specify initial state of the components in colony assuming 
 % a) the activator is  high at the colony edges
 % b) component order: [Activator Inhibitor1 BMp4_inhibitor BMP4].
+
+global userParam
 
 nComponents = userParam.nComponents;
 initialState = zeros(nSquares,nSquares,nComponents);
@@ -19,8 +21,15 @@ end
 
 if userParam.nComponents == 4
     % adding BMP4 values
-    for ii = 1:size(colonyEdgeIdx,1)
-        initialState(colonyEdgeIdx(ii,1), colonyEdgeIdx(ii,2), 4) = userParam.BMP_t0;
+    for ii = 1:size(colonyIdx,1)
+        initialState(colonyIdx(ii,1), colonyIdx(ii,2), 4) = userParam.BMP_t0;
+    end
+end
+
+if userParam.knockout > 0
+    % knocking out a component
+    for ii = 1:size(colonyIdx,1)
+        initialState(colonyIdx(ii,1), colonyIdx(ii,2), userParam.knockout) = 0;
     end
 end
 

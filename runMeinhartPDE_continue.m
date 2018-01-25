@@ -33,7 +33,7 @@ for tt=1:userParam.nT
     if mod(tt,50)==0
         disp(int2str(tt));
     end
-    newState = oneStep2D_1(fhandle, userParam.Dc, currState, colonyIdx, colonyOutIdx, userParam);
+    newState = oneStep2D_1(fhandle,currState, colonyIdx, colonyOutIdx);
     if mod(tt, userParam.saveEvery) == 0
         storeStates(:,:,:,q1) = newState;
         q1 = q1 + 1;

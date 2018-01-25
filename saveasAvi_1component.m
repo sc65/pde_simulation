@@ -36,7 +36,7 @@ for ii = 1:nTimePoints
         
         
         if component == 1
-            caxis([0 1.6]);
+            caxis([0 2]);
         elseif component < 4
             caxis([0 1]);
         else

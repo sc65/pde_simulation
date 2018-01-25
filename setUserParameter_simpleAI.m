@@ -7,9 +7,9 @@ global userParam
 
 userParam.nComponents = 4; %[activator; inhibitor; BMP4_inhibitor; BMP4].
 if userParam.nComponents == 2
-    fhandle = @(x) simpleAI(x, userParam); 
+    fhandle = @(x) simpleAI(x); 
 else
-    fhandle = @(x) simpleAI_BMP4(x, userParam); 
+    fhandle = @(x) simpleAI_BMP4(x); 
 end
 
 %% ----------------- equation parameters.
@@ -30,6 +30,7 @@ userParam.activator_t0 = 1.1;
 userParam.BMP_t0 = 10; %initial concentration of BMP4.
 userParam.BMP_inhibitor = 3;% position of BMP4_inhibitor in component list 
 
+userParam.knockout = 0; % position of the component you want to knockout from the system
 %% -------------------------------------------------------------
 %% -------------------- lattice, simulation parameters.
 % colony:region where all the action occurs, forms a small part of a big square lattice - ensures that anything

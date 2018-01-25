@@ -1,7 +1,9 @@
-function f = simpleAI(u,userParam)
+function f = simpleAI(u)
 %Corresponds to Eq 1. of Koch & Meinhardt RMP 66:1481 (1994)
 % u(1): Activator
 % u(2): Inhibitor
+
+global userParam
 
 rho = userParam.rho;
 kappa= userParam.kappa;

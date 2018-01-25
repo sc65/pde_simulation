@@ -1,6 +1,10 @@
-function f = simpleAI_BMP4(u,userParam)
+function f = simpleAI_BMP4(u)
 %Adapted from Eq 1. of Koch & Meinhardt RMP 66:1481 (1994)
 % u = [Activator, Inhibitor,  BMP4_inhibitor, BMP4].  
+
+
+global userParam
+
 rho = userParam.rho;
 kappa= userParam.kappa;
 sigma = userParam.sigma; 

@@ -2,18 +2,20 @@
 %% run simulation.
 % specify number of components in parameter file.
 
+clear global userParam
 clearvars;
-saveInPath = '/Users/sapnachhabra/Desktop/modelTry/2'; mkdir(saveInPath); 
+saveInPath = '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/1'; mkdir(saveInPath); 
 % path to save .mat output files
 
 paramfile = 'setUserParameter_travellingWave'; 
 global userParam
 
-fhandle = eval(paramfile);
+eval(paramfile);
 
 nSides = userParam.nSides(1);
 radius = userParam.colonyRadius(1);
 kappa = userParam.kappa;
+fhandle =  userParam.fhandle;
 
 runMeinhartPDE(fhandle,  kappa, radius, nSides, saveInPath);
 %%
@@ -31,10 +33,6 @@ for ii = 1
     saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
         radius, nSides, ii)    
 end
-%%
-
-
-
 
 
 

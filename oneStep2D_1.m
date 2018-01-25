@@ -1,14 +1,17 @@
-function newState = oneStep2D_1(dFunc,Dc,oldState, colonyIdx, colonyOutIdx, userParam)
+function newState = oneStep2D_1(dFunc,oldState, colonyIdx, colonyOutIdx)
+
+global userParam
 
 kdOut = userParam.kd1;
-dx = userParam.dx; 
+dx = userParam.dx;
 dt = userParam.dt;
 BMP_t0 = userParam.BMP_t0;
 ki = userParam.ki;
+Dc = userParam.Dc;
 
 BMP_inhibitor = userParam.BMP_inhibitor;
 
-%% calculating diffusion terms 
+%% calculating diffusion terms
 si = size(oldState);
 diag = 0;
 diffFilter = [diag 1 diag; 1 -4-4*diag 1; diag 1 diag];
@@ -28,14 +31,21 @@ for ii = 1:size(colonyIdx,1)
     reactTerms(rowId,columnId,:) = dFunc(squeeze(oldState(rowId,columnId,:)));
 end
 
-% slow degradation of components outside the colony. 
+
+if userParam.knockout >0
+    components = setxor(1:userParam.nComponents, userParam.knockout);
+else
+    components = 1:userParam.nComponents;
+end
+
+% slow degradation of components outside the colony.
 for ii = 1:size(colonyOutIdx,1)
     rowId = colonyOutIdx(ii,1);
     columnId = colonyOutIdx(ii,2);
-    values = squeeze(oldState(rowId,columnId,:));
+    values = squeeze(oldState(rowId,columnId,components));
     
     newValues = -kdOut*values;
-    reactTerms(rowId,columnId,:) = newValues;
+    reactTerms(rowId,columnId,components) = newValues;
     
 end
 
@@ -43,7 +53,7 @@ newState = oldState+dt.*(diffterms+reactTerms);
 
 %% adding the inhibition of BMP4 inhibitor on BMP4.
 if size(oldState,3) == 4
-    newState(:,:,4) = BMP_t0./(1+ki.*newState(:,:,BMP_inhibitor)); 
+    newState(:,:,4) = BMP_t0./(1+ki.*newState(:,:,BMP_inhibitor));
 end
 
 newState(newState<0) = 0; % concentration >= 0.

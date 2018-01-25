@@ -1,5 +1,5 @@
 
-function fhandle = setUserParameter_travellingWave
+function setUserParameter_travellingWave
 % parameters adapted from parameter sets for figure2 
 % of "Out-of-phase oscillations and traveling waves with unusual properties: the use of three-component systems in biology" 
 
@@ -8,9 +8,9 @@ global userParam
 userParam.nComponents = 4; %[activator; inhibitor1(diffusive); inhibitor2; BMP4].
 
 if userParam.nComponents == 3
-    fhandle = @(x) travellingWave(x, userParam); 
+    userParam.fhandle = @(x) travellingWave(x); 
 else
-    fhandle = @(x) travellingWave_BMP4(x, userParam); 
+    userParam.fhandle = @(x) travellingWave_BMP4(x); 
 end
 %% ----------------- equation parameters.
 userParam.kd = [0.005; 0.008; 0.001; 0]; %degradation of proteins in the colony.  - meinhardt's paper
@@ -33,6 +33,7 @@ userParam.BMP_inhibitor = 2; % component that inhibits BMP4.
 userParam.ki = 0.005; % inhibitor1 inhibition on BMP4
 userParam.kb = 0.02; % activation of activator in the colony by BMP4.
 
+userParam.knockout = 0; % position of the component you want to knockout from the system.
 
 %% -------------------- lattice, simulation parameters.
 % colony:region where all the action occurs, forms a small part of a big square lattice - ensures that anything
@@ -54,7 +55,7 @@ userParam.edgeDistance = 3; %assume a high initial activator value at a distance
 
 
 userParam.dt = 0.01; %time step
-userParam.nT = 40000; %no. of timesteps in simulation
+userParam.nT = 80000; %no. of timesteps in simulation
 
 userParam.saveEvery = 100; % update component values every 100 timesteps. 
 userParam.writeEvery = 1000; % save component values in a 4dmatrix (x,y, component, time)
