@@ -2,7 +2,7 @@
 %% to continue a previous simulation
 clear global userParam;
 clearvars;
-saveInPath =  '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/1'; mkdir(saveInPath); 
+saveInPath =  '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/1_2'; mkdir(saveInPath); 
 % path to saved .mat output files from previous simulation
 outputFiles = dir([saveInPath filesep '*.mat']);
 

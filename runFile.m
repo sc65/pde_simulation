@@ -4,7 +4,7 @@
 
 clear global userParam
 clearvars;
-saveInPath = '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/1'; mkdir(saveInPath); 
+saveInPath = '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/3_2_lowD_highInhibition'; mkdir(saveInPath); 
 % path to save .mat output files
 
 paramfile = 'setUserParameter_travellingWave'; 
@@ -21,15 +21,17 @@ runMeinhartPDE(fhandle,  kappa, radius, nSides, saveInPath);
 %%
 %% view and save output as a video
 %%
-matFilesPath = saveInPath;
-matFilesPrefix = 'k1radius25';
 
-aviFilesPath =   saveInPath;
-aviFilesPrefix = 'component1';
+matFilesPrefix = 'k1radius35'; % .mat output file prefix (part before _t1.mat)
+matFilesPath = saveInPath; % path to the output files
 
-component = 1;
+component = 3; % component for which you want to view the results
+aviFilesPath =  saveInPath; % path to save the results
 
-for ii = 1
+aviFilesPrefix = ['component' int2str(component)];
+
+
+for ii = component
     saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
         radius, nSides, ii)    
 end

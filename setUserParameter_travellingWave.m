@@ -17,7 +17,8 @@ userParam.kd = [0.005; 0.008; 0.001; 0]; %degradation of proteins in the colony.
 userParam.kd1 = 0.01; %degradation of proteins outside the colony.
 
 userParam.s = 0.015; %random fluctuation
-userParam.Dc = [0.003; 0.2; 0; 0]; %[Activator inhibitor1(that diffuses) inhibitor2(does not diffuse) BMP4]
+%userParam.Dc = [0.003; 0.2; 0; 0]; % diffusion constants [Activator inhibitor1(that diffuses) inhibitor2(does not diffuse) BMP4]
+userParam.Dc = [0.0005; 0.2; 0; 0];
 
 userParam.kI1 = 0.5; %inhibition of inhibitor 1 on activator.
 userParam.kI2 = 0.5; %inhibition of inhibitor 2 on activator. 
@@ -30,7 +31,8 @@ userParam.activator_t0 = 3.1; % initial high activator level at edges.
 userParam.BMP_t0 = 10; %high media concentration
 userParam.BMP_inhibitor = 2; % component that inhibits BMP4.
 
-userParam.ki = 0.005; % inhibitor1 inhibition on BMP4
+%userParam.ki = 0.005; % inhibitor1 inhibition on BMP4
+userParam.ki = 0.1;
 userParam.kb = 0.02; % activation of activator in the colony by BMP4.
 
 userParam.knockout = 0; % position of the component you want to knockout from the system.
@@ -47,9 +49,9 @@ userParam.latticeRadiusDifference = 7;
 % lattice = nSqures*nSquares
 
 
-userParam.colonyRadius = [25]; %in pixels, radius of the circular colony; can also be specified as an array
+userParam.colonyRadius = [35]; %in pixels, radius of the circular colony; can also be specified as an array
 % for other shapes, side length is calculated such that area of the shape = area of the circle with colonyradius 
-userParam.nSides = 0; %for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.nSides = 3; %for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
 
 userParam.edgeDistance = 3; %assume a high initial activator value at a distance <= edgeDistance from the colony edges.
 
