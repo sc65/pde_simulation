@@ -18,7 +18,7 @@ userParam.kd1 = 0.01; %degradation of proteins outside the colony.
 
 userParam.s = 0.015; %random fluctuation
 %userParam.Dc = [0.003; 0.2; 0; 0]; % diffusion constants [Activator inhibitor1(that diffuses) inhibitor2(does not diffuse) BMP4]
-userParam.Dc = [0.0005; 0.2; 0; 0];
+userParam.Dc = [0.003; 0.2; 0; 0];
 
 userParam.kI1 = 0.5; %inhibition of inhibitor 1 on activator.
 userParam.kI2 = 0.5; %inhibition of inhibitor 2 on activator. 
@@ -35,7 +35,8 @@ userParam.BMP_inhibitor = 2; % component that inhibits BMP4.
 userParam.ki = 0.1;
 userParam.kb = 0.02; % activation of activator in the colony by BMP4.
 
-userParam.knockout = 0; % position of the component you want to knockout from the system.
+userParam.knockout = 3; 
+% position of the component in [Activator inhibitor1(that diffuses) inhibitor2(does not diffuse) BMP4] you want to knockout from the system.
 
 %% -------------------- lattice, simulation parameters.
 % colony:region where all the action occurs, forms a small part of a big square lattice - ensures that anything
