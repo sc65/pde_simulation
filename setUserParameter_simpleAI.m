@@ -1,5 +1,5 @@
 %%
-function fhandle = setUserParameter_simpleAI
+function setUserParameter_simpleAI
 %% parameters for simpleAI, simpleAI_BMP4.
 % adapted from parameter sets for figure1 of Koch & Meinhardt RMP 66:1481 (1994) 
 
@@ -7,9 +7,9 @@ global userParam
 
 userParam.nComponents = 4; %[activator; inhibitor; BMP4_inhibitor; BMP4].
 if userParam.nComponents == 2
-    fhandle = @(x) simpleAI(x); 
+    userParam.fhandle = @(x) simpleAI(x); 
 else
-    fhandle = @(x) simpleAI_BMP4(x); 
+    userParam.fhandle = @(x) simpleAI_BMP4(x); 
 end
 
 %% ----------------- equation parameters.
@@ -46,7 +46,7 @@ userParam.latticeRadiusDifference = 7;
 
 userParam.colonyRadius = [25]; %in pixels, radius of the circular colony; can also be specified as an array
 % for other shapes, side length is calculated such that area of the shape = area of the circle with colonyradius 
-userParam.nSides = 0; % for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.nSides = 3; % for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
 
 userParam.edgeDistance = 3; %assume a high initial activator value at a distance <= edgeDistance from the colony edges.
 
