@@ -22,7 +22,8 @@ end
 if userParam.nComponents == 4
     % adding BMP4 values
     for ii = 1:size(colonyIdx,1)
-        initialState(colonyIdx(ii,1), colonyIdx(ii,2), 4) = userParam.BMP_t0;
+        %initialState(colonyIdx(ii,1), colonyIdx(ii,2), 4) = userParam.BMP_t0;
+        initialState(:, :, 4) = userParam.BMP_t0; % BMP high everywhere
     end
 end
 

@@ -4,10 +4,8 @@
 
 clear global userParam
 clearvars;
-saveInPath = '/Users/sapnachhabra/Desktop/modelTry/tw/bmp_high_everwhere/3_2_highD_highInhibition_noI2'; mkdir(saveInPath); 
-% path to save .mat output files
 
-paramfile = 'setUserParameter_travellingWave'; 
+paramfile = 'setUserParameter_simpleAI';
 global userParam
 
 eval(paramfile);
@@ -17,24 +15,37 @@ radius = userParam.colonyRadius(1);
 kappa = userParam.kappa;
 fhandle =  userParam.fhandle;
 
+saveInPath = ['/Volumes/sapnaDrive2/180522_modelSimulation/simpleAI_mod1/radius_' int2str(radius) '/circle']; % path to save .mat output files
+mkdir(saveInPath);
+%%
 runMeinhartPDE(fhandle,  kappa, radius, nSides, saveInPath);
 %%
 %% view and save output as a video
 %%
+saveInPath_masterFolder = '/Volumes/SAPNA/1803257_PDEmodel_fft_movies/noDiffusionBMP_movies/Parameters1';
+matFilesPath_masterFolder = '/Volumes/SAPNA/1803257_PDEmodel_fft_movies/noDiffusionBMP/Parameters1'; % path to the output files
 
-matFilesPrefix = 'k1radius35'; % .mat output file prefix (part before _t1.mat)
-matFilesPath = saveInPath; % path to the output files
+component = 1:3; % component for which you want to view the results
 
-component = 4; % component for which you want to view the results
-aviFilesPath =  saveInPath; % path to save the results
-
-aviFilesPrefix = ['component' int2str(component)];
+matFilesPrefix = 'k1radius20'; % .mat output file prefix (part before _t1.mat)
 
 
-for ii = component
-    saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
-        radius, nSides, ii)    
+shapes = {'Circles', ' ', 'Triangle', 'Square'};
+for nSides = [1 3 4]
+    radius = 20;
+    
+    aviFilesPath = [saveInPath_masterFolder filesep shapes{nSides}];
+    mkdir(aviFilesPath);
+    
+    matFilesPath = [matFilesPath_masterFolder filesep shapes{nSides}]; 
+ 
+    for ii = component
+        aviFilesPrefix = ['component' int2str(component)];
+        saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
+            radius, nSides, ii)
+    end
 end
+%%
 
 
 

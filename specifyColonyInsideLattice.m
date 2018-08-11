@@ -1,13 +1,16 @@
-function [colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(lattice, colonyRadius, nSides)
+function [colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(lattice, colonyRadius, nSides, quadrantCut)
 %% function to specify colony inside lattice
 % colonyIdx: pixels in colony.
 % colonyOutIdx = pixels outside colony
 % colonyState = binary matrix:-  1:colony.
 
-if nSides>0
+if nSides>1
     colonyState = specifyRegularPolygonColony(lattice, colonyRadius, nSides);
 else
-    colonyState = specifyCircularColony(lattice, colonyRadius);
+    if ~exist('quadrantCut', 'var')
+        quadrantCut = 0; % default: circle
+    end
+    colonyState = specifyCircularColony(lattice, colonyRadius, quadrantCut);
 end
 
 [colonyIdx_1, colonyIdx_2] = find(colonyState); % [rows, columns]. all non-zero pixels

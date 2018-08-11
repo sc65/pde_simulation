@@ -5,7 +5,7 @@ function setUserParameter_travellingWave
 
 global userParam 
 
-userParam.nComponents = 4; %[activator; inhibitor1(diffusive); inhibitor2; BMP4].
+userParam.nComponents = 3; %[activator; inhibitor1(diffusive); inhibitor2; BMP4].
 
 if userParam.nComponents == 3
     userParam.fhandle = @(x) travellingWave(x); 
@@ -50,9 +50,12 @@ userParam.latticeRadiusDifference = 7;
 % lattice = nSqures*nSquares
 
 
-userParam.colonyRadius = [35]; %in pixels, radius of the circular colony; can also be specified as an array
+userParam.colonyRadius = [25]; %in pixels, radius of the circular colony; can also be specified as an array
 % for other shapes, side length is calculated such that area of the shape = area of the circle with colonyradius 
-userParam.nSides = 3; %for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.nSides = 1; %for circle nSides = 0, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.quadrantCut = 2; 
+% only applicable for circle, pacman and semi-circle. i.e. when nSides = 1;
+% for circle, set this to 0. for pacman, to 1. for semi-circle, to 2. for any other shape, set this to NaN
 
 userParam.edgeDistance = 3; %assume a high initial activator value at a distance <= edgeDistance from the colony edges.
 

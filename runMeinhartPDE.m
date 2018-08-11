@@ -1,7 +1,7 @@
 function runMeinhartPDE(fhandle,  kappa, radius, nSides, saveInPath)
 %% runs simulation on a :
 % circle, nSides = 0 with 'radius' = radius.
-% triangle, nSides = 3 
+% triangle, nSides = 3
 % square, nSides = 4
 
 %----- saves the value of simulation in a .mat file in the
@@ -18,10 +18,12 @@ nSquares = 2*(radius + userParam.latticeRadiusDifference/userParam.dx);
 %% specify initial conditions
 int2str(3)
 initialState = zeros(nSquares,nSquares,userParam.nComponents); %state of lattice
-[colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(initialState, radius, nSides);
-colonyEdgeIdx = specifyRegionWithinColony(colonyState, userParam.edgeDistance); % pixel values where the activator is initially high
-[currState, storeStates] =specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx);
 
+[colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(initialState, radius, nSides, userParam.quadrantCut);
+
+colonyEdgeIdx = specifyRegionWithinColony(colonyState, userParam.edgeDistance); % pixel values where the activator is initially high
+
+[currState, storeStates] =specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx);
 %% evaluate derivative function.
 int2str(4)
 tic;
@@ -32,6 +34,7 @@ for tt=1:userParam.nT
         disp(int2str(tt));
     end
     newState = oneStep2D_1(fhandle, currState, colonyIdx, colonyOutIdx);
+    
     if mod(tt, userParam.saveEvery) == 0
         storeStates(:,:,:,q1) = newState;
         q1 = q1 + 1;

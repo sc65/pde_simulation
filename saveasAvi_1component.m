@@ -1,15 +1,17 @@
 function saveasAvi_1component(matFilesPath, matFilesPrefix, aviFilesPath, aviFilesPrefix, ...
-    radius, nSides, component)
+    radius, nSides, quadrantCut, component)
 %% combining output from multiple .mat output files and saving a video.
 
 files  = dir([matFilesPath filesep matFilesPrefix '*.mat']);
 nTimePoints = numel(files);
+%nTimePoints = 100;
 videoPath = [aviFilesPath filesep aviFilesPrefix '_' matFilesPrefix];
 
 %%
 
 fig = figure;
-set(fig, 'Position', [68 800 500 400]);
+%set(fig, 'Position', [68 800 500 400]);
+set(fig, 'Position', [68 1000 600 500]);
 fullVideoPath = [videoPath 'component' int2str(component) '.avi'];
 v = VideoWriter(fullVideoPath); v.FrameRate = 5; open(v);
 
@@ -23,28 +25,33 @@ for ii = 1:nTimePoints
         nSquares = size(storeStates,1);
         edgeLength = 1;
         lattice = false(nSquares);
-        [~, ~, colonyState] = specifyColonyInsideLattice(lattice, radius, nSides);
+        [~, ~, colonyState] = specifyColonyInsideLattice(lattice, radius, nSides, quadrantCut);
+        
+        colonyState = colonyState([50:140], [50:140]);
         [colonyEdgeIdx] = specifyRegionWithinColony(colonyState, edgeLength);
+        
     end
     timeSteps = size(storeStates,4);
     
-    for kk = [1 10:10:timeSteps] % each file has multiple timesteps
+    for kk = [1 20:20:timeSteps] % each file has multiple timesteps
         values = storeStates(:,:,component,kk);
+        values = values([50:140], [50:140]);
+        
         imagesc(values); colorbar;
         title(['component=' int2str(component) ' t=' int2str(counter)]);
         counter = counter+1;
         
         
-        if component == 1
-            caxis([0.5 3.5]);
-        elseif component < 4
-            caxis([0 3]);
-        else
-            caxis([7 10]);
-        end
+%         if component == 1
+%             caxis([0 2]);
+%         elseif component == 2
+%             caxis([0 2]);
+%         else
+%             caxis([0 10]);
+%         end
         
         hold on;
-        plot(colonyEdgeIdx(:,2), colonyEdgeIdx(:,1), 'k.', 'MarkerSize', 8); axis off;
+        plot(colonyEdgeIdx(:,2), colonyEdgeIdx(:,1), 'k.', 'MarkerSize', 30); axis off;
         
         
         drawnow;
