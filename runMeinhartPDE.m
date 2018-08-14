@@ -22,7 +22,6 @@ initialState = zeros(nSquares,nSquares,userParam.nComponents); %state of lattice
 [colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(initialState, radius, nSides, userParam.quadrantCut);
 
 colonyEdgeIdx = specifyRegionWithinColony(colonyState, userParam.edgeDistance); % pixel values where the activator is initially high
-
 [currState, storeStates] =specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx);
 %% evaluate derivative function.
 int2str(4)

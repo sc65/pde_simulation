@@ -43,7 +43,7 @@ userParam.latticeRadiusDifference = 7;
 
 userParam.colonyRadius = [25]; %in pixels, radius of the circular colony; can also be specified as an array
 % for other shapes, side length is calculated such that area of the shape = area of the circle with colonyradius
-userParam.nSides = [1]; %for circle nSides = 1, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.nSides = [0]; %for circle nSides = 1, equilateral triangle = 3, square = 4; can be specified as an array
 userParam.quadrantCut = 0; 
 % only applicable for circle, pacman and semi-circle. i.e. when nSides = 1;
 % for circle, set this to 0. for pacman, to 1. for semi-circle, to 2. for any other shape, set this to NaN

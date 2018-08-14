@@ -15,7 +15,7 @@ radius = userParam.colonyRadius(1);
 kappa = userParam.kappa;
 fhandle =  userParam.fhandle;
 
-saveInPath = ['/Volumes/sapnaDrive2/180522_modelSimulation/simpleAI_mod1/radius_' int2str(radius) '/circle']; % path to save .mat output files
+saveInPath = ['/Volumes/sapnaDrive2/180522_modelSimulation/travellingWave_noBMP_noI2_fft/Parameters4_noBasal_10_kappa0_highkd/lattice']; % path to save .mat output files
 mkdir(saveInPath);
 %%
 runMeinhartPDE(fhandle,  kappa, radius, nSides, saveInPath);

@@ -1,5 +1,5 @@
 function [currState, storeStates] = specifyInitialConditionsEdgeActivation(nSquares, colonyIdx, colonyEdgeIdx)
-%% specify initial state of the components in colony assuming
+%% specify initial state of the components in colony assuming 
 % a) the activator is  high at the colony edges
 % b) component order: [Activator Inhibitor1 BMp4_inhibitor BMP4].
 
@@ -13,12 +13,12 @@ for ii = 1:size(colonyIdx,1)
     initialState(colonyIdx(ii,1), colonyIdx(ii,2), :) = rand(1, 1, nComponents); %random values everywhere
 end
 
-
-if userParam.nSides>0 % high activator at colony edges
-    for ii = 1:size(colonyEdgeIdx,1)
-        initialState(colonyEdgeIdx(ii,1), colonyEdgeIdx(ii,2), 1) = userParam.activator_t0; %high activator values at the edges
-    end
+% high activator at the edges.
+if userPar
+for ii = 1:size(colonyEdgeIdx,1)
+    initialState(colonyEdgeIdx(ii,1), colonyEdgeIdx(ii,2), 1) = userParam.activator_t0; %high activator values at the edges
 end
+
 
 if userParam.nComponents == 4
     % adding BMP4 values

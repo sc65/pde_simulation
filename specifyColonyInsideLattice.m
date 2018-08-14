@@ -4,7 +4,9 @@ function [colonyIdx, colonyOutIdx, colonyState] = specifyColonyInsideLattice(lat
 % colonyOutIdx = pixels outside colony
 % colonyState = binary matrix:-  1:colony.
 
-if nSides>1
+if nSides == 0
+    colonyState = ones(size(lattice,1), size(lattice,2)); % run simulation on lattice
+elseif nSides>1
     colonyState = specifyRegularPolygonColony(lattice, colonyRadius, nSides);
 else
     if ~exist('quadrantCut', 'var')

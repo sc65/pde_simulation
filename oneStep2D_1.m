@@ -38,7 +38,7 @@ else
     components = 1:userParam.nComponents;
 end
 
-% slow degradation of components outside the colony.
+%slow degradation of components outside the colony.
 for ii = 1:size(colonyOutIdx,1)
     rowId = colonyOutIdx(ii,1);
     columnId = colonyOutIdx(ii,2);
@@ -48,9 +48,9 @@ for ii = 1:size(colonyOutIdx,1)
     reactTerms(rowId,columnId,components) = newValues;
     
 end
-
+% 
 newState = oldState+dt.*(diffterms+reactTerms);
-
+% 
 %% adding the inhibition of BMP4 inhibitor on BMP4.
 if size(oldState,3) == 4
     newState(:,:,4) = BMP_t0./(1+ki.*newState(:,:,BMP_inhibitor));

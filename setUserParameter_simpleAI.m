@@ -13,15 +13,14 @@ else
 end
 
 %% ----------------- equation parameters.
-
-userParam.kappa = [0]; % saturation ; can be specified as an array
+userParam.Dc = [0.01; 0.2; 0.2; 0.00001]; %Diffusion constants, [activator inhibitor BMP4_inhibitor BMP4].
+userParam.kd = [0.01; 0.02; 0.2; 0]; %degradation of comnponents in colony, [activator inhibitor BMP4_inhibitor BMP4], assumes constant BMP4.
 userParam.rho = [0.1; 0.2]; %[activator_auto-activation inhibitor_activation]
 
-userParam.kd = [0.005; 0.01; 0.2; 0]; %degradation of comnponents in colony, [activator inhibitor BMP4_inhibitor BMP4], assumes constant BMP4.
-userParam.kd1 = 0.05; %degradation of components outside colony
-
+userParam.kappa = [0]; % saturation ; can be specified as an array
 userParam.sigma = [0; 0];
-userParam.Dc = [0.005; 0.2; 0.2; 0.00001]; %Diffusion constants, [activator inhibitor BMP4_inhibitor BMP4].
+
+userParam.kd1 = 0.05; %degradation of components outside colony
 
 userParam.kb = [0.005; 0.5]; %[BMP4_activation_of_Activator, BMP4_activation_of_BMP4_inhibitor]
 userParam.ki = 0.05; %BMP4_inhibitor inhibition on BMP4
@@ -46,7 +45,7 @@ userParam.latticeRadiusDifference = 7;
 
 userParam.colonyRadius = [25]; %in pixels, radius of the circular colony; can also be specified as an array
 % for other shapes, side length is calculated such that area of the shape = area of the circle with colonyradius 
-userParam.nSides = 1; % for circle nSides = 1, equilateral triangle = 3, square = 4; can be specified as an array
+userParam.nSides = 0; % entire lattice = 0, circle nSides = 1, equilateral triangle = 3, square = 4; can be specified as an array
 userParam.quadrantCut = 0; 
 % only applicable for circle, pacman and semi-circle. i.e. when nSides = 1;
 % for circle, set this to 0. for pacman, to 1. for semi-circle, to 2. for any other shape, set this to NaN

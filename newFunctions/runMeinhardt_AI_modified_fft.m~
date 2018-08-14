@@ -1,6 +1,6 @@
 function runMeinhardt_AI_modified_fft(kappa, radius, nSides, saveInPath)
 %%% Hacked up spectral version of the RD code- from Ryan
-%% original activator inhibitor travelling waves model, no bmp4
+%% original activator inhibitor travelling waves model, no bmp4 
 
 global userParam
 
@@ -42,14 +42,11 @@ if nSides > 1 % included different shapes
 elseif nSides == 1
     chi = specifyCircularColony(initialState, radius, userParam.quadrantCut);
 else
-    chi = ~initialState; % entire lattice
+    chi = 
 end
-
-if nSides>=1
-    [~,edge] = specifyRegionWithinColony(chi, userParam.edgeWidth);
-    chi = double(chi);
-    edge = double(edge);
-end
+[~,edge] = specifyRegionWithinColony(chi, userParam.edgeWidth);
+chi = double(chi);
+edge = double(edge);
 
 media = ~chi;
 %%
@@ -75,7 +72,7 @@ S2 = 1 - dt*L2;
 S3 = 1 - dt*L3 ;%- dt*L3;%-> because D3 = 0
 
 %%Define Nonlinearities
-f1 = @(uu1,uu2,uu3) (sa*(uu1.^2 + ba) + k2*uu3)./((1+uu2).*(1+kappa*uu1.^2)) - ra*uu1;
+f1 = @(uu1,uu2,uu3) (sa*(uu1.^2 + ba) + k2*uu3)./((1+uu2).*(1+kappa*uu1.^2)) - ra*uu1; 
 f2 = @(uu1,uu2,uu3) si*uu1.^2 - rb*uu2 + bb;
 f3 = @(uu1,uu2,uu3) 0;
 
@@ -86,22 +83,16 @@ f3 = @(uu1,uu2,uu3) 0;
 
 %% -------------------- Set up Initial conditions
 u3_ic = 0;  %%BMP at edges
-u2_ic = 0;
+u1_ic = userParam.initial_values(1);
 
 %noise size
-noise = 1;
+noise = 1; 
 
-if nSides>0
-    u1_ic = userParam.initial_values(1);
-    u1_0 = noise*rand(N,N).*(chi-edge) + u1_ic*edge;
-else
-    u1_0 =  noise*rand(N,N).*chi;
-end
+u1_0 = noise*rand(N,N).*(chi-edge) + u1_ic*edge; 
+%u1_0 = noise*rand(N,N).*(chi);
 
-
-u2_0 =  u2_ic*noise*rand(N,N).*chi;
-%u3_0 =  u3_ic*(edge|media);
-u3_0 = u3_ic*media;
+u2_0 =  noise*rand(N,N).*chi;
+u3_0 =  u3_ic*(edge|media);
 
 
 %%Calculate fourier transforms of these initial data, v denote
@@ -118,7 +109,7 @@ storeStates(:,:,3,1) = u3_0;
 %%
 %%%%Start the time stepper
 tic;
-while t< tmax
+while t< tmax 
     t = t+dt;
     u1 = real(ifft2(v1));
     u2 = real(ifft2(v2));

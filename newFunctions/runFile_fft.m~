@@ -17,6 +17,7 @@ kappa = userParam.kappa;
 shapes = {'Circles', ' ', 'Triangle', 'Square'};
 %%
 for ii = 1:numel(userParam.nSides)
+    
     if userParam.nSides(ii) == 1 & userParam.quadrantCut == 1
         suffix = 'pacman';
     elseif userParam.nSides(ii) == 1 & userParam.quadrantCut == 2
@@ -26,8 +27,9 @@ for ii = 1:numel(userParam.nSides)
     else
         suffix = shapes{userParam.nSides(ii)};
     end
+    
     saveInPath = [saveInPath_masterFolder filesep suffix];
     mkdir(saveInPath);
-    runMeinhardt_AI_modified_fft(kappa, radius, userParam.nSides(ii), saveInPath); 
+    runMeinhardt_AI_modified_fft(kappa, radius, userPAranSides(ii), saveInPath); 
 end
 %%
