@@ -1,0 +1,22 @@
+%% ------- steady state solution for the best model
+
+sa = 0.01; %rate of self-activation
+si = 0.01; %rate of inhibitor activation
+
+ra = 0.001; %degradation of proteins in the colony
+rb = 0.008;
+
+kappa = 0;
+
+syms  x y
+eqn1 = sa*x.^2./((1+y).*(1+kappa*x^2)) - ra*x == 0; %f(x,y)
+eqn2 = si*x.^2 - rb*y == 0;% g(x,y)
+s = solve(eqn1, eqn2, 'ReturnConditions', true);
+
+x0 = double(vpa(s.x))
+y0 = double(vpa(s.y))
+
+%% ----------------------------
+eqn3 = 2*sa*x./(1+y) - ra;
+eqn4 = -sa*x^2./((1+y)^2);
+eqn5 = 2*si*x;

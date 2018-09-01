@@ -1,13 +1,12 @@
-function runMeinhardt_AI_modified_fft(kappa, radius, nSides, saveInPath)
+function runMeinhardt_AI_modified_fft2_continue(storeStates, fileSuffix, tMax,  kappa, nSides, saveInPath)
 %%% Hacked up spectral version of the RD code- from Ryan
-%% original activator inhibitor travelling waves model, no bmp4 
+%% original activator inhibitor travelling waves model, no bmp4
 
 global userParam
 
 %% %System Parameters
 d = userParam.Dc;  %%diffusion constants
 
-%kappa = 0.3; %[0 0.25] [spots,stripes]
 sa = userParam.sa; %rate of self-activation
 si = userParam.si; %rate of inhibitor activation
 
@@ -23,10 +22,16 @@ kd2 = 0; %degradation of BMP4 outside colony
 k2 = userParam.kb; % activation of activator by BMP
 %s = userParam.s;% random fluctuation
 
-%% %%Set up domain
-L= radius*5;  %domain size
+tmax = tMax*userParam.dt;
+dt = userParam.dt; %time step
 
-nSquares = 2*(radius + userParam.latticeRadiusDifference/userParam.dx);
+updateStoreStates = userParam.updateEvery*userParam.dt;
+saveStoreStates = userParam.writeInFileEvery*userParam.dt;
+
+%% %%Set up domain
+L= userParam.colonyRadius*5;  %domain size
+
+nSquares = 2*(userParam.colonyRadius + userParam.latticeRadiusDifference/userParam.dx);
 N = nSquares; %2^9.
 
 %x =linspace(-L,L,N);% (L/N)*(1:N)';
@@ -38,26 +43,12 @@ N = nSquares; %2^9.
 initialState = zeros(nSquares, nSquares);
 
 if nSides > 1 % included different shapes
-    chi = specifyRegularPolygonColony(initialState, radius, nSides);
+    chi = specifyRegularPolygonColony(initialState, userParam.colonyRadius, nSides);
 elseif nSides == 1
-    chi = specifyCircularColony(initialState, radius, userParam.quadrantCut);
+    chi = specifyCircularColony(initialState, userParam.colonyRadius, userParam.quadrantCut);
 else
-    chi = 
+    chi = ~initialState; % entire lattice
 end
-[~,edge] = specifyRegionWithinColony(chi, userParam.edgeWidth);
-chi = double(chi);
-edge = double(edge);
-
-media = ~chi;
-%%
-tmax = userParam.nT*userParam.dt;
-dt = userParam.dt; %time step
-
-
-updateStoreStates = userParam.updateEvery*userParam.dt;
-saveStoreStates = userParam.writeInFileEvery*userParam.dt;
-
-q1 = 2; q2 = 1; % for storeStates
 
 %% %Set up fourier variable and the laplacian operator
 k = [0:N/2-1, 0 , -N/2+1:-1]'/(L/(2*pi));  %%fourier vector, for matlab fft
@@ -72,28 +63,19 @@ S2 = 1 - dt*L2;
 S3 = 1 - dt*L3 ;%- dt*L3;%-> because D3 = 0
 
 %%Define Nonlinearities
-f1 = @(uu1,uu2,uu3) (sa*(uu1.^2 + ba) + k2*uu3)./((1+uu2).*(1+kappa*uu1.^2)) - ra*uu1; 
+if userParam.knockout == 2 % without inhibitor
+    f1 = @(uu1,uu2,uu3) (sa*(uu1.^2 + ba) + k2*uu3)./((1+kappa*uu1.^2)) - ra*uu1;
+else
+    f1 = @(uu1,uu2,uu3) (sa*(uu1.^2 + ba) + k2*uu3)./((1+uu2).*(1+kappa*uu1.^2)) - ra*uu1;
+end
+
 f2 = @(uu1,uu2,uu3) si*uu1.^2 - rb*uu2 + bb;
 f3 = @(uu1,uu2,uu3) 0;
 
-
-%%Find steady state equilibrium
-%  fff =@(u) [f1(u(1),u(2),u(3),10) ;f2(u(1),u(2),u(3),10) ;f3(u(1),u(2),u(3),10)];% ;f4(u(1),u(2),u(3),u(4))];
-%  [equil] = fsolve(fff,[1.4,1,1])
-
 %% -------------------- Set up Initial conditions
-u3_ic = 0;  %%BMP at edges
-u1_ic = userParam.initial_values(1);
-
-%noise size
-noise = 1; 
-
-u1_0 = noise*rand(N,N).*(chi-edge) + u1_ic*edge; 
-%u1_0 = noise*rand(N,N).*(chi);
-
-u2_0 =  noise*rand(N,N).*chi;
-u3_0 =  u3_ic*(edge|media);
-
+u1_0 = storeStates(:,:,1,end);
+u2_0 = storeStates(:,:,2,end);
+u3_0 = storeStates(:,:,3,end);
 
 %%Calculate fourier transforms of these initial data, v denote
 %%fourier transformed variables
@@ -103,13 +85,11 @@ v3 = fft2(u3_0);
 t = 1;
 
 storeStates = zeros(N, N, 3, saveStoreStates);
-storeStates(:,:,1,1) = u1_0;
-storeStates(:,:,2,1) = u2_0;
-storeStates(:,:,3,1) = u3_0;
+q1 = 1; q2 = fileSuffix; % for storeStates
 %%
 %%%%Start the time stepper
 tic;
-while t< tmax 
+while t< tmax
     t = t+dt;
     u1 = real(ifft2(v1));
     u2 = real(ifft2(v2));
@@ -117,6 +97,7 @@ while t< tmax
     
     u1(u1<0) = 0;
     u2(u2<0) = 0;
+   
     
     %u3 = u3./(1+ki.*u2); % inhibition of inhibitor on BMP4.
     
@@ -127,13 +108,12 @@ while t< tmax
         q1 = q1 + 1;
         
         if  mod(q1-1, saveStoreStates) == 0
-            outputFile = [saveInPath filesep 'k' num2str(ceil(kappa)) 'radius' int2str(radius) ...
-                '_t' int2str(q2) '.mat'];
+            outputFile = [saveInPath filesep 'radius' int2str(userParam.colonyRadius) '_t' int2str(q2) '.mat'];
             save(outputFile, 'storeStates', 'userParam');
             
             q2 = q2 +1;
             q1 = 1;
-            storeStates = zeros(N, N,3, saveStoreStates); % re initialize
+                storeStates = zeros(N, N,3, saveStoreStates); % re initialize
         end
     end
     

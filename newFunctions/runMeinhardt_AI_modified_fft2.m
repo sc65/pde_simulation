@@ -1,4 +1,4 @@
-function runMeinhardt_AI_modified_fft(kappa, radius, nSides, saveInPath)
+function runMeinhardt_AI_modified_fft2(kappa, radius, nSides, saveInPath)
 %%% Hacked up spectral version of the RD code- from Ryan
 %% original activator inhibitor travelling waves model, no bmp4
 
@@ -25,7 +25,8 @@ k2 = userParam.kb; % activation of activator by BMP
 %% %%Set up domain
 L= radius*5;  %domain size
 
-nSquares = 2*(radius + userParam.latticeRadiusDifference/userParam.dx);
+%nSquares = 2*(radius + userParam.latticeRadiusDifference/userParam.dx);
+nSquares = 2;
 N = nSquares; %2^9.
 
 %x =linspace(-L,L,N);% (L/N)*(1:N)';
@@ -44,8 +45,9 @@ else
     chi = ~initialState; % entire lattice
 end
 
+edgeWidth = radius./userParam.radiusByEdgeRatio;
+
 if nSides>=1
-    edgeWidth = radius./userParam.radiusByEdgeRatio;
     [~,edge] = specifyRegionWithinColony(chi, edgeWidth);
     chi = double(chi);
     edge = double(edge);
@@ -98,13 +100,16 @@ u3_ic = 0;  %%BMP at edges
 noise = 1;
 
 if nSides>0
-    u1_0 = noise*rand(N,N).*(chi-edge) + u1_ic*edge;
+    u1_0 = noise*(rand(N,N)+0.1).*(chi-edge) + u1_ic*edge;
 else
-    u1_0 =  u1_ic*noise*rand(N,N).*chi;
+    u1_0 =  u1_ic*noise*(rand(N,N)+0.1).*chi;
+%     x1 = datasample(1:190,1);
+%     y1 = datasample(1:190,1);
+%     u1_0(x1,[y1:y1+floor(edgeWidth)]) = u1_ic;
 end
 
 
-u2_0 =  u2_ic*noise*rand(N,N).*chi;
+u2_0 =  u2_ic*noise*(rand(N,N)+0.1).*chi;
 %u3_0 =  u3_ic*(edge|media);
 u3_0 = u3_ic*media;
 
@@ -121,6 +126,9 @@ storeStates(:,:,1,1) = u1_0;
 storeStates(:,:,2,1) = u2_0;
 storeStates(:,:,3,1) = u3_0;
 %%
+saveInPath = [saveInPath filesep 'k' num2str(kappa)];
+mkdir(saveInPath);
+
 %%%%Start the time stepper
 tic;
 while t< tmax
@@ -131,6 +139,7 @@ while t< tmax
     
     u1(u1<0) = 0;
     u2(u2<0) = 0;
+   
     
     %u3 = u3./(1+ki.*u2); % inhibition of inhibitor on BMP4.
     
@@ -141,8 +150,7 @@ while t< tmax
         q1 = q1 + 1;
         
         if  mod(q1-1, saveStoreStates) == 0
-            outputFile = [saveInPath filesep 'k' num2str(ceil(kappa)) 'radius' int2str(radius) ...
-                '_t' int2str(q2) '.mat'];
+            outputFile = [saveInPath filesep 'radius' int2str(radius) '_t' int2str(q2) '.mat'];
             save(outputFile, 'storeStates', 'userParam');
             
             q2 = q2 +1;

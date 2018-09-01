@@ -1,6 +1,6 @@
 %%
 nSides = 1;
-viewLimits = [60 120]; edgeLength = 1; lattice = zeros(180); radius = 20;
+viewLimits = [60 120]; edgeLength = 1; lattice = zeros(180); radius = 25;
 %%
 [~, ~, colonyState] = specifyColonyInsideLattice(lattice, radius, nSides);
 colonyState = colonyState([viewLimits(1):viewLimits(2)], [viewLimits(1):viewLimits(2)]);
